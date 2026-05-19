@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import { API_URL } from "@/config";
 
 interface Product {
   id: number;
@@ -20,7 +21,7 @@ export default function GestionarProductos() {
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch("http://localhost:3001/products");
+      const res = await fetch(`${API_URL}/products`);
       setProducts(await res.json());
     } catch (e) {
       console.error(e);
@@ -39,7 +40,7 @@ export default function GestionarProductos() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const url = editId ? `http://localhost:3001/products/${editId}` : "http://localhost:3001/products";
+      const url = editId ? `${API_URL}/products/${editId}` : `${API_URL}/products`;
       const method = editId ? "PUT" : "POST";
       const res = await fetch(url, {
         method,
@@ -72,7 +73,7 @@ export default function GestionarProductos() {
   const handleDelete = async (id: number) => {
     if (!confirm("¿Seguro que deseas borrar este producto?")) return;
     try {
-      const res = await fetch(`http://localhost:3001/products/${id}`, {
+      const res = await fetch(`${API_URL}/products/${id}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
       });

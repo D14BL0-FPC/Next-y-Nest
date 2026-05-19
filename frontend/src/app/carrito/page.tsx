@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { API_URL } from "@/config";
 
 interface Purchase {
   id: number;
@@ -23,7 +24,7 @@ export default function Carrito() {
   const fetchCart = async () => {
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch("http://localhost:3001/purchases/cart", {
+      const res = await fetch(`${API_URL}/purchases/cart`, {
         headers: { "Authorization": `Bearer ${token}` }
       });
       if (res.ok) {
@@ -52,7 +53,7 @@ export default function Carrito() {
   const updateQuantity = async (id: number, quantity: number) => {
     if (quantity < 1) return;
     try {
-      await fetch(`http://localhost:3001/purchases/cart/${id}`, {
+      await fetch(`${API_URL}/purchases/cart/${id}`, {
         method: "PUT",
         headers: { 
           "Content-Type": "application/json",
@@ -68,7 +69,7 @@ export default function Carrito() {
 
   const removeItem = async (id: number) => {
     try {
-      await fetch(`http://localhost:3001/purchases/cart/${id}`, {
+      await fetch(`${API_URL}/purchases/cart/${id}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
       });
@@ -80,7 +81,7 @@ export default function Carrito() {
 
   const checkout = async () => {
     try {
-      const res = await fetch("http://localhost:3001/purchases/checkout", {
+      const res = await fetch(`${API_URL}/purchases/checkout`, {
         method: "POST",
         headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
       });

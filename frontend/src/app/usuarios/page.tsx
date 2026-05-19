@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { API_URL } from "@/config";
 
 interface User {
   id: number;
@@ -15,7 +16,7 @@ export default function Usuarios() {
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch("http://localhost:3001/users", {
+      const res = await fetch(`${API_URL}/users`, {
         headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
       });
       if (res.ok) setUsers(await res.json());
@@ -43,7 +44,7 @@ export default function Usuarios() {
 
   const changeRole = async (id: number, newProfile: string) => {
     try {
-      const res = await fetch(`http://localhost:3001/users/${id}/profile`, {
+      const res = await fetch(`${API_URL}/users/${id}/profile`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

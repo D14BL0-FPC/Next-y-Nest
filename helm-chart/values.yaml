@@ -1,0 +1,37 @@
+# Global configurations
+namespace: next-y-nest
+
+# Backend (NestJS + SQLite)
+backend:
+  replicaCount: 1  # SQLite requires 1 replica to prevent database locking/sync issues
+  image:
+    repository: backend
+    tag: latest
+    pullPolicy: Never # Using local build
+  service:
+    type: ClusterIP
+    port: 3001
+  persistence:
+    enabled: true
+    storageClass: local-path # Default in k3s
+    size: 1Gi
+  jwtSecret: "super_secret_key_aura_store_2026"
+
+# Frontend (Next.js)
+frontend:
+  replicaCount: 3  # High availability: if a pod falls, the web stays up!
+  image:
+    repository: frontend
+    tag: latest
+    pullPolicy: Never # Using local build
+  service:
+    type: ClusterIP
+    port: 3000
+
+# Ingress Configurations
+ingress:
+  enabled: true
+  className: traefik
+  hosts:
+    backend: api.vuelaguadalinfogarrucha.es
+    frontend: vuelaguadalinfogarrucha.es

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { API_URL } from "@/config";
 
 export default function ProductDetail() {
   const params = useParams();
@@ -12,7 +13,7 @@ export default function ProductDetail() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await fetch(`http://localhost:3001/products/${params.id}`);
+        const res = await fetch(`${API_URL}/products/${params.id}`);
         if (!res.ok) throw new Error("Producto no encontrado");
         const data = await res.json();
         setProduct(data);
@@ -34,7 +35,7 @@ export default function ProductDetail() {
   const addToCart = async () => {
     if (!profile) return;
     try {
-      const res = await fetch("http://localhost:3001/purchases/cart", {
+      const res = await fetch(`${API_URL}/purchases/cart`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -17,7 +17,7 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'better-sqlite3',
-      database: 'database.sqlite',
+      database: process.env.DATABASE_PATH || 'database.sqlite',
       entities: [User, Product, Purchase],
       synchronize: true,
     }),

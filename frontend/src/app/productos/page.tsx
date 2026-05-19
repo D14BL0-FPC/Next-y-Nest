@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState, FormEvent } from "react";
 import Link from "next/link";
+import { API_URL } from "@/config";
 
 interface Product {
   id: number;
@@ -17,7 +18,7 @@ export default function Products() {
 
   const fetchProducts = async (searchQuery = "") => {
     try {
-      const url = searchQuery ? `http://localhost:3001/products?query=${encodeURIComponent(searchQuery)}` : `http://localhost:3001/products`;
+      const url = searchQuery ? `${API_URL}/products?query=${encodeURIComponent(searchQuery)}` : `${API_URL}/products`;
       const res = await fetch(url);
       const data = await res.json();
       setProducts(data);
@@ -52,7 +53,7 @@ export default function Products() {
   const addToCart = async (productId: number) => {
     if (!profile) return;
     try {
-      const res = await fetch("http://localhost:3001/purchases/cart", {
+      const res = await fetch(`${API_URL}/purchases/cart`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

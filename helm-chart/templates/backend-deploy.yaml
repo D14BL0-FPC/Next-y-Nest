@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deploy
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: backend
+spec:
+  replicas: {{ .Values.backend.replicaCount }}
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+          imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.backend.service.port }}
+          env:
+            - name: DATABASE_PATH
+              value: "/app/data/database.sqlite"
+            - name: JWT_SECRET
+              value: "{{ .Values.backend.jwtSecret }}"
+            - name: PORT
+              value: "{{ .Values.backend.service.port }}"
+          volumeMounts:
+            - name: db-volume
+              mountPath: /app/data
+      volumes:
+        - name: db-volume
+          persistentVolumeClaim:
+            claimName: backend-sqlite-pvc
